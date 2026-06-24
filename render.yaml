@@ -1,0 +1,21 @@
+# render.yaml — deploy automático no Render (alternativa ao Railway)
+
+services:
+  - type: web
+    name: burozero-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: MONGODB_URL
+        sync: false          # preenches no dashboard do Render
+      - key: JWT_SECRET
+        generateValue: true  # Render gera automaticamente
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: DB_NAME
+        value: burozero
