@@ -86,3 +86,6 @@ class ProcessOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+PROCESS_TEMPLATES = {}
+
