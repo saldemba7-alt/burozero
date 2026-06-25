@@ -14,3 +14,4 @@ EXPOSE 8000
 
 # Comando de arranque
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Qui 25 Jun 2026 14:43:12 WEST
