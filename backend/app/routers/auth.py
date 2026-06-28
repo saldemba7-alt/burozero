@@ -23,9 +23,7 @@ async def request_otp(body: AuthRequest):
     otp = user.generate_otp()
     await user.save()
 
-    sent = send_otp_email(email, otp)
-    if not sent:
-        raise HTTPException(500, "Erro ao enviar email. Tenta novamente.")
+    send_otp_email(email, otp)
 
     return {"ok": True, "message": f"Código enviado para {email}", "dev_otp": otp}
 
