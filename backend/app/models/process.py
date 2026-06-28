@@ -1,7 +1,7 @@
 from beanie import Document
 from pydantic import BaseModel, Field
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 
 
@@ -48,13 +48,13 @@ class Process(Document):
 
     @property
     def days_since_update(self) -> int:
-        return (datetime.utcnow() - self.last_update).days
+        return (datetime.now(timezone.utc) - self.last_update).days
 
     @property
     def days_until_deadline(self) -> Optional[int]:
         if not self.deadline:
             return None
-        return (self.deadline - datetime.utcnow()).days
+        return (self.deadline - datetime.now(timezone.utc)).days
 
 
 # ── Pydantic schemas ──────────────────────────────────────────
