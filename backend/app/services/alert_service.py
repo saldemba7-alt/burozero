@@ -36,7 +36,8 @@ async def check_and_create_alerts(process: Process) -> None:
             ))
 
     # 2. Stalled process (no update in 30+ days)
-    days_stalled = (now - process.last_update).days
+    last_update = process.last_update.replace(tzinfo=__import__("datetime").timezone.utc) if process.last_update.tzinfo is None else process.last_update
+    days_stalled = (now - last_update).days
     if days_stalled >= 30 and process.status not in (StatusType.CONCLUIDO,):
         alerts_to_create.append(Alert(
             user_id=process.user_id,
