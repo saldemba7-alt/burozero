@@ -27,7 +27,7 @@ async def request_otp(body: AuthRequest):
     if not sent:
         raise HTTPException(500, "Erro ao enviar email. Tenta novamente.")
 
-    return {"ok": True, "message": f"Código enviado para {email}"}
+    return {"ok": True, "message": f"Código enviado para {email}", "dev_otp": otp}
 
 
 @router.post("/verify-otp", response_model=TokenResponse)
