@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from app.models.alert import Alert, AlertLevel
 from app.models.process import Process, StatusType
 
@@ -12,7 +12,7 @@ async def check_and_create_alerts(process: Process) -> None:
     - Processo parado há mais de 30 dias
     """
     alerts_to_create = []
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
 
     # 1. Deadline warnings
     if process.deadline:
