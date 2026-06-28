@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from app.services.token_service import get_current_user
+from app.models.user import User
 from typing import List
 from datetime import datetime
 from app.models.process import (
@@ -29,13 +31,15 @@ def to_out(p: Process) -> ProcessOut:
 # ── Routes ────────────────────────────────────────────────────
 
 @router.get("/", response_model=List[ProcessOut])
-async def list_processes(user_id: str = "demo"):
+async def list_processes(current_user: User = Depends(get_current_user)):
+    user_id = str(current_user.id)
     processes = await Process.find(Process.user_id == user_id).to_list()
     return [to_out(p) for p in processes]
 
 
 @router.post("/", response_model=ProcessOut, status_code=201)
-async def create_process(data: ProcessCreate, user_id: str = "demo"):
+async def create_process(data: ProcessCreate, current_user: User = Depends(get_current_user)):
+    user_id = str(current_user.id)
     # Load default steps from template if available
     template_steps = PROCESS_TEMPLATES.get(data.title, [])
 
