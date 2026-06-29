@@ -48,13 +48,15 @@ class Process(Document):
 
     @property
     def days_since_update(self) -> int:
-        return (datetime.now(timezone.utc) - self.last_update).days
+        lu = self.last_update.replace(tzinfo=timezone.utc) if self.last_update.tzinfo is None else self.last_update
+        return (datetime.now(timezone.utc) - lu).days
 
     @property
     def days_until_deadline(self) -> Optional[int]:
         if not self.deadline:
             return None
-        return (self.deadline - datetime.now(timezone.utc)).days
+        dl = self.deadline.replace(tzinfo=timezone.utc) if self.deadline.tzinfo is None else self.deadline
+        return (dl - datetime.now(timezone.utc)).days
 
 
 # ── Pydantic schemas ──────────────────────────────────────────
