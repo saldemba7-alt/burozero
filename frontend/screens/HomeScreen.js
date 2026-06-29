@@ -116,7 +116,7 @@ export default function HomeScreen({ navigation }) {
       {/* Process list */}
       <View style={s.sectionHeader}>
         <Text style={s.sectionTitle}>OS MEUS PROCESSOS</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("AddProcess")}>
+        <TouchableOpacity onPress={() => navigation.getParent().navigate("AddProcess")}>
           <Text style={s.addLink}>+ Adicionar</Text>
         </TouchableOpacity>
       </View>
@@ -127,7 +127,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={s.emptyText}>Sem processos ainda.</Text>
           <TouchableOpacity
             style={s.emptyBtn}
-            onPress={() => navigation.navigate("AddProcess")}
+            onPress={() => navigation.getParent().navigate("AddProcess")}
           >
             <Text style={s.emptyBtnText}>Adicionar primeiro processo</Text>
           </TouchableOpacity>
