@@ -29,7 +29,7 @@ export default function HomeScreen({ navigation }) {
   const [refreshing,  setRefreshing]  = useState(false);
 
   const load = useCallback(async () => {
-    try {
+      try {
         const procs = await ProcessesAPI.list();
         setProcesses(procs);
       } catch (e) { console.error('P', e); }
@@ -43,7 +43,7 @@ export default function HomeScreen({ navigation }) {
       } catch (e) { console.error('C', e); }
       setLoading(false);
       setRefreshing(false);
-    }, []);
+  }, []);
 
   useEffect(() => { load(); }, []);
 
