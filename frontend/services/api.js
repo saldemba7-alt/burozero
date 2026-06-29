@@ -2,12 +2,15 @@
 // Camada de comunicação com o BuroZero Backend
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:8000/api";
-const USER_ID  = "demo"; // substituir por auth real
+let AUTH_TOKEN = "";
+export function setAuthToken(token) { AUTH_TOKEN = token || ""; }
 
 // ── helpers ──────────────────────────────────────────────────
 async function request(path, options = {}) {
+  const headers = { "Content-Type": "application/json" };
+  if (AUTH_TOKEN) headers["Authorization"] = `Bearer ${AUTH_TOKEN}`;
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { "Content-Type": "application/json" },
+    headers,
     ...options,
   });
   if (!res.ok) {
@@ -20,13 +23,13 @@ async function request(path, options = {}) {
 // ── PROCESSES ─────────────────────────────────────────────────
 export const ProcessesAPI = {
   list: () =>
-    request(`/processes/?user_id=${USER_ID}`),
+    request(`/processes/`),
 
   get: (id) =>
     request(`/processes/${id}`),
 
   create: (data) =>
-    request(`/processes/?user_id=${USER_ID}`, {
+    request(`/processes/`, {
       method: "POST",
       body: JSON.stringify(data),
     }),
@@ -49,13 +52,13 @@ export const ProcessesAPI = {
 // ── ALERTS ───────────────────────────────────────────────────
 export const AlertsAPI = {
   list: (unreadOnly = false) =>
-    request(`/alerts/?user_id=${USER_ID}&unread_only=${unreadOnly}`),
+    request(`/alerts/&unread_only=${unreadOnly}`),
 
   markRead: (id) =>
     request(`/alerts/${id}/read`, { method: "PATCH" }),
 
   markAllRead: () =>
-    request(`/alerts/read-all?user_id=${USER_ID}`, { method: "PATCH" }),
+    request(`/alerts/read-all`, { method: "PATCH" }),
 };
 
 // ── CALENDAR ──────────────────────────────────────────────────

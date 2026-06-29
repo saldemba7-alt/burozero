@@ -37,7 +37,10 @@ export default function LoginScreen() {
     setLoading(true);
     setError("");
     try {
-      await requestOTP(email);
+      const result = await requestOTP(email);
+      if (result.dev_otp) {
+        Alert.alert("DEV MODE", "Código OTP: " + result.dev_otp);
+      }
       setStep("otp");
     } catch (e) {
       setError(e.message);
