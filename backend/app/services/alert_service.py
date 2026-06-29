@@ -16,7 +16,8 @@ async def check_and_create_alerts(process: Process) -> None:
 
     # 1. Deadline warnings
     if process.deadline:
-        days_left = (process.deadline - now).days
+        dl = process.deadline.replace(tzinfo=timezone.utc) if process.deadline.tzinfo is None else process.deadline
+        days_left = (dl - now).days
 
         if days_left <= 2:
             alerts_to_create.append(Alert(
