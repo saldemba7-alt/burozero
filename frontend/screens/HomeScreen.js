@@ -29,20 +29,21 @@ export default function HomeScreen({ navigation }) {
   const [refreshing,  setRefreshing]  = useState(false);
 
   const load = useCallback(async () => {
-      try {
+    try {
         const procs = await ProcessesAPI.list();
         setProcesses(procs);
-      } catch (e) { console.error("P err", e); }
+      } catch (e) { console.error('P', e); }
       try {
         const alts = await AlertsAPI.list(true);
         setAlerts(alts);
-      } catch (e) { console.error("A err", e); }
+      } catch (e) { console.error('A', e); }
       try {
         const cal = await CalendarAPI.getUpcoming(30);
         setUpcoming(cal);
-      } catch (e) { console.error("C err", e); }
+      } catch (e) { console.error('C', e); }
       setLoading(false);
       setRefreshing(false);
+    }, []);
 
   useEffect(() => { load(); }, []);
 
@@ -116,7 +117,7 @@ export default function HomeScreen({ navigation }) {
       {/* Process list */}
       <View style={s.sectionHeader}>
         <Text style={s.sectionTitle}>OS MEUS PROCESSOS</Text>
-        <TouchableOpacity onPress={() => navigation.getParent().navigate("AddProcess")}>
+        <TouchableOpacity onPress={() => navigation.navigate("AddProcess")}>
           <Text style={s.addLink}>+ Adicionar</Text>
         </TouchableOpacity>
       </View>
@@ -127,7 +128,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={s.emptyText}>Sem processos ainda.</Text>
           <TouchableOpacity
             style={s.emptyBtn}
-            onPress={() => navigation.getParent().navigate("AddProcess")}
+            onPress={() => navigation.navigate("AddProcess")}
           >
             <Text style={s.emptyBtnText}>Adicionar primeiro processo</Text>
           </TouchableOpacity>
