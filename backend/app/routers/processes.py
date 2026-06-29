@@ -33,7 +33,9 @@ def to_out(p: Process) -> ProcessOut:
 @router.get("/", response_model=List[ProcessOut])
 async def list_processes(current_user: User = Depends(get_current_user)):
     user_id = str(current_user.id)
+    print(f"LIST: user_id={user_id}, token_user={current_user.email}")
     processes = await Process.find(Process.user_id == user_id).to_list()
+    print(f"LIST: found {len(processes)} processes")
     return [to_out(p) for p in processes]
 
 
