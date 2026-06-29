@@ -29,22 +29,20 @@ export default function HomeScreen({ navigation }) {
   const [refreshing,  setRefreshing]  = useState(false);
 
   const load = useCallback(async () => {
-    try {
-      const [procs, alts, cal] = await Promise.all([
-        ProcessesAPI.list(),
-        AlertsAPI.list(true),       // unread only
-        CalendarAPI.getUpcoming(30),
-      ]);
-      setProcesses(procs);
-      setAlerts(alts);
-      setUpcoming(cal);
-    } catch (e) {
-      console.error(e);
-    } finally {
+      try {
+        const procs = await ProcessesAPI.list();
+        setProcesses(procs);
+      } catch (e) { console.error("P err", e); }
+      try {
+        const alts = await AlertsAPI.list(true);
+        setAlerts(alts);
+      } catch (e) { console.error("A err", e); }
+      try {
+        const cal = await CalendarAPI.getUpcoming(30);
+        setUpcoming(cal);
+      } catch (e) { console.error("C err", e); }
       setLoading(false);
       setRefreshing(false);
-    }
-  }, []);
 
   useEffect(() => { load(); }, []);
 
