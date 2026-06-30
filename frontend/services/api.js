@@ -52,7 +52,7 @@ export const ProcessesAPI = {
 // ── ALERTS ───────────────────────────────────────────────────
 export const AlertsAPI = {
   list: (unreadOnly = false) =>
-    request(`/alerts/&unread_only=${unreadOnly}`),
+    request(`/alerts/?unread_only=${unreadOnly}`),
 
   markRead: (id) =>
     request(`/alerts/${id}/read`, { method: "PATCH" }),
