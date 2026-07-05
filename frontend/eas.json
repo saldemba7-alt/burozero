@@ -1,5 +1,6 @@
 {
   "cli": {
+    "appVersionSource": "local",
     "version": ">= 5.0.0"
   },
   "build": {
@@ -12,13 +13,13 @@
       "distribution": "internal",
       "android": { "buildType": "apk" },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://burozero-api.railway.app/api"
+        "EXPO_PUBLIC_API_URL": "https://burozero-production.up.railway.app/api"
       }
     },
     "production": {
-      "android": { "buildType": "aab" },
+      "android": { "buildType": "app-bundle" },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://burozero-api.railway.app/api"
+        "EXPO_PUBLIC_API_URL": "https://burozero-production.up.railway.app/api"
       }
     }
   },
