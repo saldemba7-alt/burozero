@@ -5,7 +5,7 @@ import { setAuthToken } from "../services/api";
 
 const AuthContext = createContext(null);
 
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:8000/api";
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL || "https://burozero-production.up.railway.app/api";
 
 export function AuthProvider({ children }) {
   const [token,   setToken]   = useState(null);
