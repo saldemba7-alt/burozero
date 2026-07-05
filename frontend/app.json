@@ -29,11 +29,12 @@
         "VIBRATE"
       ]
     },
-    "plugins": [],
+    "plugins": ["expo-notifications"],
     "extra": {
       "eas": {
-        "projectId": "SUBSTITUI-PELO-TEU-PROJECT-ID"
+        "projectId": "0ae652c1-cbf6-46bc-bd38-c3b27cb696c8"
       }
-    }
+    },
+    "owner": "saldemba7"
   }
 }
