@@ -1,15 +1,41 @@
 // App.js
 import { registerRootComponent } from 'expo';
-import React from 'react';
+import React, { createBottomTabNavigator } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, Text, ScrollView } from 'react-native';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import AddProcessScreen from './screens/ProcessDetailScreen';
 import NewProcessScreen from './screens/AddProcessScreen';
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <ScrollView style={{ flex: 1, backgroundColor: '#000', padding: 20 }}>
+          <Text style={{ color: 'red', fontSize: 18, marginTop: 50 }}>ERRO:</Text>
+          <Text style={{ color: 'white', fontSize: 12, marginTop: 10 }}>
+            {this.state.error?.toString()}
+          </Text>
+          <Text style={{ color: '#888', fontSize: 10, marginTop: 10 }}>
+            {this.state.error?.stack}
+          </Text>
+        </ScrollView>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,28 +56,28 @@ function RootNavigator() {
       <ActivityIndicator color={COLORS.accent} size="large" />
     </View>
   );
-  return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: COLORS.bg }, headerTintColor: COLORS.text, headerBackTitleVisible: false, contentStyle: { backgroundColor: COLORS.bg } }}>
-        {isAuthenticated ? (
-          <>
-            <Stack.Screen name="Main" component={AppTabs} options={{ headerShown: false }} />
-            <Stack.Screen name="ProcessDetail" component={AddProcessScreen} options={{ title: "Processo" }} />
-            <Stack.Screen name="AddProcess" component={NewProcessScreen} options={{ title: "Novo Processo" }} />
-          </>
-        ) : (
-          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+  return isAuthenticated ? (
+    <Stack.Navigator>
+      <Stack.Screen name="Main" component={AppTabs} options={{ headerShown: false }} />
+      <Stack.Screen name="ProcessDetail" component={AddProcessScreen} options={{ title: "Processo" }} />
+      <Stack.Screen name="AddProcess" component={NewProcessScreen} options={{ title: "Novo Processo" }} />
+    </Stack.Navigator>
+  ) : (
+    <Stack.Navigator>
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+    </Stack.Navigator>
   );
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <RootNavigator />
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
