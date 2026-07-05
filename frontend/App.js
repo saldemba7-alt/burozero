@@ -1,6 +1,6 @@
 // App.js
 import { registerRootComponent } from 'expo';
-import React, { createBottomTabNavigator } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -24,12 +24,8 @@ class ErrorBoundary extends React.Component {
       return (
         <ScrollView style={{ flex: 1, backgroundColor: '#000', padding: 20 }}>
           <Text style={{ color: 'red', fontSize: 18, marginTop: 50 }}>ERRO:</Text>
-          <Text style={{ color: 'white', fontSize: 12, marginTop: 10 }}>
-            {this.state.error?.toString()}
-          </Text>
-          <Text style={{ color: '#888', fontSize: 10, marginTop: 10 }}>
-            {this.state.error?.stack}
-          </Text>
+          <Text style={{ color: 'white', fontSize: 12, marginTop: 10 }}>{this.state.error?.toString()}</Text>
+          <Text style={{ color: '#888', fontSize: 10, marginTop: 10 }}>{this.state.error?.stack}</Text>
         </ScrollView>
       );
     }
@@ -39,7 +35,7 @@ class ErrorBoundary extends React.Component {
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-const COLORS = { bg: "#0d1117", surface: "#161b22", border: "#2a3548", accent: "#2563eb", muted: "#7d8590", text: "#e6edf3" };
+const COLORS = { bg: "#0d1117", border: "#2a3548", accent: "#2563eb", muted: "#7d8590" };
 
 function AppTabs() {
   return (
