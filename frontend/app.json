@@ -29,7 +29,19 @@
         "VIBRATE"
       ]
     },
-    "plugins": ["expo-notifications"],
+    "plugins": [
+      "expo-notifications",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraProguardRules": "-keep class expo.modules.kotlin.** { *; }\n-keep class expo.modules.securestore.** { *; }\n-dontwarn expo.modules.kotlin.**"
+          }
+        }
+      ],
+      "@react-native-community/datetimepicker",
+      "expo-secure-store"
+    ],
     "extra": {
       "eas": {
         "projectId": "0ae652c1-cbf6-46bc-bd38-c3b27cb696c8"
