@@ -1,6 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from typing import List
 from app.models.alert import Alert, AlertOut
+from app.models.user import User
+from app.services.token_service import get_current_user
 
 router = APIRouter()
 
@@ -16,7 +18,8 @@ def to_out(a: Alert) -> AlertOut:
     )
 
 @router.get("/", response_model=List[AlertOut])
-async def list_alerts(user_id: str = "demo", unread_only: bool = False):
+async def list_alerts(unread_only: bool = False, current_user: User = Depends(get_current_user)):
+    user_id = str(current_user.id)
     query = Alert.find(Alert.user_id == user_id)
     if unread_only:
         query = query.find(Alert.read == False)
@@ -24,14 +27,15 @@ async def list_alerts(user_id: str = "demo", unread_only: bool = False):
     return [to_out(a) for a in alerts]
 
 @router.patch("/{alert_id}/read")
-async def mark_read(alert_id: str):
+async def mark_read(alert_id: str, current_user: User = Depends(get_current_user)):
     alert = await Alert.get(alert_id)
-    if not alert:
+    if not alert or alert.user_id != str(current_user.id):
         raise HTTPException(404, "Alerta não encontrado")
     await alert.update({"$set": {"read": True}})
     return {"ok": True}
 
 @router.patch("/read-all")
-async def mark_all_read(user_id: str = "demo"):
+async def mark_all_read(current_user: User = Depends(get_current_user)):
+    user_id = str(current_user.id)
     await Alert.find(Alert.user_id == user_id).update({"$set": {"read": True}})
     return {"ok": True}

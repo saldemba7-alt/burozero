@@ -25,7 +25,7 @@ async def request_otp(body: AuthRequest):
 
     send_otp_email(email, otp)
 
-    return {"ok": True, "message": f"Código enviado para {email}", "dev_otp": otp}
+    return {"ok": True, "message": f"Código enviado para {email}"}
 
 
 @router.post("/verify-otp", response_model=TokenResponse)

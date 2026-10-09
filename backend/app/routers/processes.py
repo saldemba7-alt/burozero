@@ -63,17 +63,17 @@ async def create_process(data: ProcessCreate, current_user: User = Depends(get_c
 
 
 @router.get("/{process_id}", response_model=ProcessOut)
-async def get_process(process_id: str):
+async def get_process(process_id: str, current_user: User = Depends(get_current_user)):
     process = await Process.get(process_id)
-    if not process:
+    if not process or process.user_id != str(current_user.id):
         raise HTTPException(404, "Processo não encontrado")
     return to_out(process)
 
 
 @router.patch("/{process_id}", response_model=ProcessOut)
-async def update_process(process_id: str, data: ProcessUpdate):
+async def update_process(process_id: str, data: ProcessUpdate, current_user: User = Depends(get_current_user)):
     process = await Process.get(process_id)
-    if not process:
+    if not process or process.user_id != str(current_user.id):
         raise HTTPException(404, "Processo não encontrado")
 
     update_data = data.dict(exclude_none=True)
@@ -85,9 +85,9 @@ async def update_process(process_id: str, data: ProcessUpdate):
 
 
 @router.patch("/{process_id}/steps/{step_order}/done")
-async def mark_step_done(process_id: str, step_order: int):
+async def mark_step_done(process_id: str, step_order: int, current_user: User = Depends(get_current_user)):
     process = await Process.get(process_id)
-    if not process:
+    if not process or process.user_id != str(current_user.id):
         raise HTTPException(404, "Processo não encontrado")
 
     for step in process.steps:
@@ -106,8 +106,8 @@ async def mark_step_done(process_id: str, step_order: int):
 
 
 @router.delete("/{process_id}", status_code=204)
-async def delete_process(process_id: str):
+async def delete_process(process_id: str, current_user: User = Depends(get_current_user)):
     process = await Process.get(process_id)
-    if not process:
+    if not process or process.user_id != str(current_user.id):
         raise HTTPException(404, "Processo não encontrado")
     await process.delete()

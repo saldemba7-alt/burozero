@@ -5,7 +5,9 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.models.user import User
 
-SECRET_KEY  = os.getenv("JWT_SECRET", "burozero-secret-muda-isto-em-producao")
+SECRET_KEY  = os.getenv("JWT_SECRET")
+if not SECRET_KEY:
+    raise RuntimeError("Variável de ambiente JWT_SECRET não definida")
 ALGORITHM   = "HS256"
 EXPIRE_DAYS = 30
 
