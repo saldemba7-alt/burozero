@@ -4,8 +4,8 @@ import urllib.error
 import json
 
 RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
-FROM_EMAIL = "onboarding@resend.dev"
-FROM_NAME = "BuroZero"
+FROM_EMAIL = "noreply@burozero.org"
+FROM_NAME = "burozero"
 
 
 def send_otp_email(to_email: str, otp_code: str) -> bool:
