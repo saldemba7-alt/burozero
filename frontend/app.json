@@ -19,11 +19,12 @@
       }
     },
     "android": {
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0d1117"
       },
-      "package": "pt.burozero.app",
+      "package": "com.saldemba7.burozero",
       "permissions": [
         "RECEIVE_BOOT_COMPLETED",
         "VIBRATE"
