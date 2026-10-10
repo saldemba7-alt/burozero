@@ -2,9 +2,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import {
   View, Text, ScrollView, TouchableOpacity,
-  StyleSheet, RefreshControl, ActivityIndicator,
+  StyleSheet, RefreshControl, ActivityIndicator, Alert,
 } from "react-native";
 import { ProcessesAPI, AlertsAPI, CalendarAPI } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import ProcessCard from "../components/ProcessCard";
 import UrgencyBanner from "../components/UrgencyBanner";
 import StatsRow from "../components/StatsRow";
@@ -22,6 +23,7 @@ const COLORS = {
 };
 
 export default function HomeScreen({ navigation }) {
+  const { logout } = useAuth();
   const [processes,   setProcesses]   = useState([]);
   const [alerts,      setAlerts]      = useState([]);
   const [upcoming,    setUpcoming]    = useState([]);
@@ -80,17 +82,32 @@ export default function HomeScreen({ navigation }) {
       {/* Header */}
       <View style={s.header}>
         <Text style={s.logo}>Buro<Text style={{ color: COLORS.accent }}>Zero</Text></Text>
-        <TouchableOpacity
-          style={s.notifBtn}
-          onPress={() => navigation.navigate("Alerts")}
-        >
-          <Text style={s.notifIcon}>🔔</Text>
-          {alerts.length > 0 && (
-            <View style={s.badge}>
-              <Text style={s.badgeText}>{alerts.length}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <TouchableOpacity
+            style={s.notifBtn}
+            onPress={() => navigation.navigate("Alerts")}
+          >
+            <Text style={s.notifIcon}>🔔</Text>
+            {alerts.length > 0 && (
+              <View style={s.badge}>
+                <Text style={s.badgeText}>{alerts.length}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={s.notifBtn}
+            onPress={() => Alert.alert(
+              "Terminar sessão",
+              "Tens a certeza que queres sair?",
+              [
+                { text: "Cancelar", style: "cancel" },
+                { text: "Sair", style: "destructive", onPress: logout },
+              ]
+            )}
+          >
+            <Text style={s.notifIcon}>🚪</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Greeting */}
