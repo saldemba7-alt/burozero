@@ -41,6 +41,7 @@ def send_otp_email(to_email: str, otp_code: str) -> bool:
             headers={
                 "Authorization": f"Bearer {RESEND_API_KEY}",
                 "Content-Type": "application/json",
+                "User-Agent": "burozero/1.0",
             },
             method="POST",
         )
