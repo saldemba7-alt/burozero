@@ -35,6 +35,7 @@ async def send_push(
         "data":  data or {},
         "badge": 1,
         "priority": "high" if level == AlertLevel.URGENT else "normal",
+        "channelId": "prazos",
     }
 
     try:
@@ -92,7 +93,14 @@ async def broadcast_daily_alerts(user_ids: Optional[List[str]] = None) -> int:
         if alert.user_id in processed_users:
             continue  # 1 push por utilizador por ciclo
 
-        user = await User.find_one(User.email == alert.user_id)  # user_id = email
+        # alert.user_id guarda o id do utilizador (ObjectId em texto)
+        try:
+            user = await User.get(alert.user_id)
+        except Exception:
+            user = None
+        if not user:
+            # compatibilidade com alertas antigos que guardavam o email
+            user = await User.find_one(User.email == alert.user_id)
         if user and user.push_token:
             ok = await notify_user(user, alert)
             if ok:
