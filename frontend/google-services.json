@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "72019457138",
+    "project_id": "burozero-7b1be",
+    "storage_bucket": "burozero-7b1be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72019457138:android:35ea8ea53d8742c08fbeeb",
+        "android_client_info": {
+          "package_name": "com.saldemba7.burozero"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWOhDGrhIEbOYuCGWV7-BVLDHBgmHGa8w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
