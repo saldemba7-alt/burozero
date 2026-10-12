@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
 import { setAuthToken } from "../services/api";
+import { registerForPushNotifications } from "../services/notifications";
 
 const AuthContext = createContext(null);
 
@@ -41,6 +42,7 @@ export function AuthProvider({ children }) {
       if (res.ok) {
         const data = await res.json();
         setUser(data);
+        registerForPushNotifications(BASE_URL, tkn);
       } else {
         await SecureStore.deleteItemAsync("auth_token");
         setToken(null);
@@ -75,10 +77,19 @@ export function AuthProvider({ children }) {
     setAuthToken(data.access_token);
     setToken(data.access_token);
     setUser({ id: data.user_id, email: data.email });
+    registerForPushNotifications(BASE_URL, data.access_token);
     return data;
   }
 
   async function logout() {
+    try {
+      if (token) {
+        await fetch(`${BASE_URL}/auth/logout`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+    } catch (_) {}
     try {
       await SecureStore.deleteItemAsync("auth_token");
     } catch (_) {}
