@@ -26,7 +26,8 @@
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://burozero-production.up.railway.app/api"
-      }
+      },
+      "autoIncrement": true
     }
   },
   "submit": {
