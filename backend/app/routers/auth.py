@@ -3,6 +3,8 @@ from datetime import datetime
 from app.models.user import User, AuthRequest, OTPVerify, TokenResponse, RegisterPushToken, UserOut
 from app.services.email_service import send_otp_email
 from app.services.token_service import create_token, get_current_user
+from app.models.process import Process
+from app.models.alert import Alert
 
 router = APIRouter()
 
@@ -87,4 +89,19 @@ async def logout(current_user: User = Depends(get_current_user)):
     """Remove o push token ao fazer logout."""
     current_user.push_token = None
     await current_user.save()
+    return {"ok": True}
+
+
+@router.delete("/account")
+async def delete_account(current_user: User = Depends(get_current_user)):
+    """
+    Apaga a conta e TODOS os dados do utilizador (processos e alertas).
+    Exigido pela Google Play para apps que criam contas.
+    """
+    user_id = str(current_user.id)
+    await Process.find(Process.user_id == user_id).delete()
+    await Alert.find(Alert.user_id == user_id).delete()
+    # alertas antigos que guardavam o email em vez do id
+    await Alert.find(Alert.user_id == current_user.email).delete()
+    await current_user.delete()
     return {"ok": True}

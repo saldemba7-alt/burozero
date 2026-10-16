@@ -97,6 +97,23 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
+  async function deleteAccount() {
+    const res = await fetch(`${BASE_URL}/auth/account`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.detail || "Não foi possível apagar a conta");
+    }
+    try {
+      await SecureStore.deleteItemAsync("auth_token");
+    } catch (_) {}
+    setAuthToken("");
+    setToken(null);
+    setUser(null);
+  }
+
   return (
     <AuthContext.Provider value={{
       token, user, loading,
@@ -104,6 +121,7 @@ export function AuthProvider({ children }) {
       requestOTP,
       verifyOTP,
       logout,
+      deleteAccount,
     }}>
       {children}
     </AuthContext.Provider>

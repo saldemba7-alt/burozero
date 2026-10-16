@@ -23,7 +23,7 @@ const COLORS = {
 };
 
 export default function HomeScreen({ navigation }) {
-  const { logout } = useAuth();
+  const { logout, deleteAccount } = useAuth();
   const [processes,   setProcesses]   = useState([]);
   const [alerts,      setAlerts]      = useState([]);
   const [upcoming,    setUpcoming]    = useState([]);
@@ -47,7 +47,44 @@ export default function HomeScreen({ navigation }) {
       setRefreshing(false);
   }, []);
 
-  useEffect(() => { load(); }, []);
+  // Recarregar sempre que se volta a este ecrã (ex.: depois de ler alertas)
+  useEffect(() => {
+    const unsub = navigation.addListener("focus", load);
+    return unsub;
+  }, [navigation, load]);
+
+  function confirmDeleteAccount() {
+    Alert.alert(
+      "Apagar conta",
+      "Vamos apagar a tua conta e todos os processos e alertas. Esta ação não pode ser desfeita.",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Apagar tudo",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deleteAccount();
+            } catch (e) {
+              Alert.alert("Erro", e.message);
+            }
+          },
+        },
+      ]
+    );
+  }
+
+  function openAccountMenu() {
+    Alert.alert(
+      "Conta",
+      undefined,
+      [
+        { text: "Terminar sessão", onPress: logout },
+        { text: "Apagar conta", style: "destructive", onPress: confirmDeleteAccount },
+        { text: "Cancelar", style: "cancel" },
+      ]
+    );
+  }
 
   // Urgent = deadline in ≤5 days OR stalled > 30 days
   const urgentProcess = processes.find(
@@ -96,14 +133,7 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={s.notifBtn}
-            onPress={() => Alert.alert(
-              "Terminar sessão",
-              "Tens a certeza que queres sair?",
-              [
-                { text: "Cancelar", style: "cancel" },
-                { text: "Sair", style: "destructive", onPress: logout },
-              ]
-            )}
+            onPress={openAccountMenu}
           >
             <Text style={s.notifIcon}>🚪</Text>
           </TouchableOpacity>

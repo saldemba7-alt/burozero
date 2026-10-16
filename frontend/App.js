@@ -10,6 +10,7 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import AddProcessScreen from './screens/ProcessDetailScreen';
 import NewProcessScreen from './screens/AddProcessScreen';
+import AlertsScreen from './screens/AlertsScreen';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -57,6 +58,7 @@ function RootNavigator() {
       <Stack.Screen name="Main" component={AppTabs} options={{ headerShown: false }} />
       <Stack.Screen name="ProcessDetail" component={AddProcessScreen} options={{ title: "Processo" }} />
       <Stack.Screen name="AddProcess" component={NewProcessScreen} options={{ title: "Novo Processo" }} />
+      <Stack.Screen name="Alerts" component={AlertsScreen} options={{ title: "Alertas" }} />
     </Stack.Navigator>
   ) : (
     <Stack.Navigator>

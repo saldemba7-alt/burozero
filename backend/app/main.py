@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import processes, alerts, calendar, auth
+from app.routers import processes, alerts, calendar, auth, pages
 from app.database import connect_db, disconnect_db
 from app.scheduler import setup_scheduler
 
@@ -26,6 +26,7 @@ app.include_router(auth.router,      prefix="/api/auth",      tags=["Auth"])
 app.include_router(processes.router, prefix="/api/processes", tags=["Processes"])
 app.include_router(alerts.router,    prefix="/api/alerts",    tags=["Alerts"])
 app.include_router(calendar.router,  prefix="/api/calendar",  tags=["Calendar"])
+app.include_router(pages.router)
 
 @app.get("/")
 async def root():
